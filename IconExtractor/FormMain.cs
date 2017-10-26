@@ -88,35 +88,6 @@ namespace IconExtractor
             icon.Show();
             icon.updateColors(child_color);
             childs.Add(icon);
-            /*
-            foreach (var group in icgrp)
-            {
-                foreach (var entry in group.icon_groups)
-                {
-                    Console.WriteLine("Иконка " + entry.ID);
-                    
-                }
-            }
-            */
-
-            /*
-            int count = (int) ExtractIcon(IntPtr.Zero, dialog.FileName, -1);
-            MessageBox.Show("Count: " + count);
-
-            IntPtr watptr = ExtractIcon(IntPtr.Zero, dialog.FileName, 1);
-            MessageBox.Show("Ptr? " + watptr);
-
-            Icon extracted = (Icon) Icon.FromHandle(watptr).Clone();
-            MessageBox.Show("Extracted size: " + extracted.Size);
-            */
-
-            /*
-            FormIcon icon = new FormIcon(this);
-            icon.MdiParent = this;
-            icon.Show();
-            icon.updateColors(child_color);
-            childs.Add(icon); 
-            */
         }
     }
 }
