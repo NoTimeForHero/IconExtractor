@@ -32,12 +32,13 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageInfo = new System.Windows.Forms.TabPage();
             this.tSM = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tSM_Info = new System.Windows.Forms.ToolStripMenuItem();
+            this.tSM_InfoGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.tSM_Line1 = new System.Windows.Forms.ToolStripSeparator();
             this.tSM_Line2 = new System.Windows.Forms.ToolStripSeparator();
             this.tSM_SaveAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tSM_SaveOneFile = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
+            this.tSM_InfoID = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageInfo.SuspendLayout();
             this.tSM.SuspendLayout();
@@ -68,20 +69,20 @@
             // tSM
             // 
             this.tSM.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tSM_Info,
+            this.tSM_InfoGroup,
+            this.tSM_InfoID,
             this.tSM_Line1,
             this.tSM_Line2,
             this.tSM_SaveAll,
             this.tSM_SaveOneFile});
             this.tSM.Name = "contextMenuStrip1";
-            this.tSM.Size = new System.Drawing.Size(201, 82);
+            this.tSM.Size = new System.Drawing.Size(201, 126);
             // 
-            // tSM_Info
+            // tSM_InfoGroup
             // 
-            this.tSM_Info.Enabled = false;
-            this.tSM_Info.Name = "tSM_Info";
-            this.tSM_Info.Size = new System.Drawing.Size(200, 22);
-            this.tSM_Info.Text = "Group: 101      (icon 5)";
+            this.tSM_InfoGroup.Enabled = false;
+            this.tSM_InfoGroup.Name = "tSM_InfoGroup";
+            this.tSM_InfoGroup.Size = new System.Drawing.Size(200, 22);
             // 
             // tSM_Line1
             // 
@@ -101,9 +102,11 @@
             // 
             // tSM_SaveOneFile
             // 
+            this.tSM_SaveOneFile.Enabled = false;
             this.tSM_SaveOneFile.Name = "tSM_SaveOneFile";
             this.tSM_SaveOneFile.Size = new System.Drawing.Size(200, 22);
             this.tSM_SaveOneFile.Text = "Save all icons to one file";
+            this.tSM_SaveOneFile.ToolTipText = "Not implemented yet";
             // 
             // label1
             // 
@@ -111,6 +114,12 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(474, 288);
             this.label1.TabIndex = 0;
+            // 
+            // tSM_InfoID
+            // 
+            this.tSM_InfoID.Enabled = false;
+            this.tSM_InfoID.Name = "tSM_InfoID";
+            this.tSM_InfoID.Size = new System.Drawing.Size(200, 22);
             // 
             // FormIcon
             // 
@@ -137,11 +146,12 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPageInfo;
         private System.Windows.Forms.ContextMenuStrip tSM;
-        private System.Windows.Forms.ToolStripMenuItem tSM_Info;
+        private System.Windows.Forms.ToolStripMenuItem tSM_InfoGroup;
         private System.Windows.Forms.ToolStripSeparator tSM_Line1;
         private System.Windows.Forms.ToolStripSeparator tSM_Line2;
         private System.Windows.Forms.ToolStripMenuItem tSM_SaveAll;
         private System.Windows.Forms.ToolStripMenuItem tSM_SaveOneFile;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem tSM_InfoID;
     }
 }
