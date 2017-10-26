@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ToolStrip_MenuSelect = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsMS_Line1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsMS_System = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsMS_OpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStrip_MenuColor = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItem_System = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,12 +59,34 @@
             // 
             // ToolStrip_MenuSelect
             // 
+            this.ToolStrip_MenuSelect.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsMS_Line1,
+            this.tsMS_System,
+            this.tsMS_OpenFile});
             this.ToolStrip_MenuSelect.Image = global::IconExtractor.Properties.Resources.iEye48x1;
             this.ToolStrip_MenuSelect.Name = "ToolStrip_MenuSelect";
             this.ToolStrip_MenuSelect.Size = new System.Drawing.Size(88, 44);
             this.ToolStrip_MenuSelect.Text = "Load";
             this.ToolStrip_MenuSelect.ToolTipText = "Choose EXE/ICO container to view icons";
             this.ToolStrip_MenuSelect.Click += new System.EventHandler(this.ToolStrip_MenuSelect_Click);
+            // 
+            // tsMS_Line1
+            // 
+            this.tsMS_Line1.Name = "tsMS_Line1";
+            this.tsMS_Line1.Size = new System.Drawing.Size(217, 6);
+            // 
+            // tsMS_System
+            // 
+            this.tsMS_System.Name = "tsMS_System";
+            this.tsMS_System.Size = new System.Drawing.Size(220, 26);
+            this.tsMS_System.Text = "System executables";
+            // 
+            // tsMS_OpenFile
+            // 
+            this.tsMS_OpenFile.Name = "tsMS_OpenFile";
+            this.tsMS_OpenFile.Size = new System.Drawing.Size(220, 26);
+            this.tsMS_OpenFile.Text = "Open executable file";
+            this.tsMS_OpenFile.Click += new System.EventHandler(this.ToolStripMenu_OpenFile_Click);
             // 
             // ToolStrip_MenuColor
             // 
@@ -111,7 +136,9 @@
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "SharpViewIcon";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -128,6 +155,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripItem_Palette;
         private System.Windows.Forms.ToolStripMenuItem toolStripItem_System;
+        private System.Windows.Forms.ToolStripSeparator tsMS_Line1;
+        private System.Windows.Forms.ToolStripMenuItem tsMS_OpenFile;
+        private System.Windows.Forms.ToolStripMenuItem tsMS_System;
     }
 }
 
