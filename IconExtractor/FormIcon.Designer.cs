@@ -37,7 +37,9 @@
             this.tSM_Line2 = new System.Windows.Forms.ToolStripSeparator();
             this.tSM_SaveAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tSM_SaveOneFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
+            this.tabPageInfo.SuspendLayout();
             this.tSM.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,10 +52,12 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(538, 369);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPageInfo
             // 
             this.tabPageInfo.AutoScroll = true;
+            this.tabPageInfo.Controls.Add(this.label1);
             this.tabPageInfo.Location = new System.Drawing.Point(4, 22);
             this.tabPageInfo.Name = "tabPageInfo";
             this.tabPageInfo.Size = new System.Drawing.Size(530, 343);
@@ -101,6 +105,13 @@
             this.tSM_SaveOneFile.Size = new System.Drawing.Size(200, 22);
             this.tSM_SaveOneFile.Text = "Save all icons to one file";
             // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(19, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(474, 288);
+            this.label1.TabIndex = 0;
+            // 
             // FormIcon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -115,6 +126,7 @@
             this.Load += new System.EventHandler(this.FormIcon_Load);
             this.Shown += new System.EventHandler(this.FormIcon_Shown);
             this.tabControl1.ResumeLayout(false);
+            this.tabPageInfo.ResumeLayout(false);
             this.tSM.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -130,5 +142,6 @@
         private System.Windows.Forms.ToolStripSeparator tSM_Line2;
         private System.Windows.Forms.ToolStripMenuItem tSM_SaveAll;
         private System.Windows.Forms.ToolStripMenuItem tSM_SaveOneFile;
+        private System.Windows.Forms.Label label1;
     }
 }
