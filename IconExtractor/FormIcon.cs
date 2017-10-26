@@ -52,13 +52,15 @@ namespace IconExtractor
             }
         }
 
-        public List<PictureBox> disposeList = new List<PictureBox>();
+        public List<IDisposable> disposeList = new List<IDisposable>();
 
         protected FormMain parent;
 
         protected string filename;
         protected IconData icons;
         protected long dllReadTime;
+
+        protected int current_icon_group;
 
         public FormIcon(FormMain parent, String filename)
         {
@@ -86,29 +88,14 @@ namespace IconExtractor
 
         protected void setIconSizes()
         {
-            //tabControl1.TabPages.Clear();
-            
             foreach (var obj in icons.icon_sizes)
             {
                 TabPage tab = new TabPage();
                 tab.AutoScroll = true;
                 tab.Text = obj.Value;
-
-                /*
-
-                */
-
                 tabControl1.TabPages.Add(tab);
-            }
-            
-
+            }            
             this.Invalidate();
-            //MessageBox.Show("Data: " + String.Join(", ",icon_sizes.Values.ToArray()));
-        }
-
-        private void Tab_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private void Pbox_Click(object sender, EventArgs e)
@@ -142,6 +129,7 @@ namespace IconExtractor
                 tSM.Items.Insert(tSM.Items.IndexOf(tSM_Line2), value);
             }
 
+            current_icon_group = group;
             tSM.Show(Cursor.Position);
         }
 
@@ -169,7 +157,9 @@ namespace IconExtractor
 
         private void FormIcon_Load(object sender, EventArgs e)
         {
-            label1.Text = String.Format("DLL loaded in {0} seconds ({1}ms)", dllReadTime, dllReadTime);
+            label1.Text = String.Format("Resources loaded in {0} seconds ({1}ms)", dllReadTime, dllReadTime);
+            var data = "\n\nExecutable name: {0}\n" + "Groups: {1}\n" + "Icons: {2}\n";
+            label1.Text += String.Format(data, Path.GetFileName(filename), icons.group_icons.Count, icons.icons.Count);
         }
 
         private void FormIcon_FormClosed(object sender, FormClosedEventArgs e)
@@ -181,8 +171,6 @@ namespace IconExtractor
         private void FormIcon_Shown(object sender, EventArgs e)
         {
             setIconSizes();
-            var data = "{0} (групп={1}, иконок={2})";
-            this.Text = String.Format(data, Path.GetFileName(filename), icons.group_icons.Count, icons.icons.Count);
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -224,12 +212,79 @@ namespace IconExtractor
                 tab.Controls.Add(pbox);
                 disposeList.Add(pbox);
 
+                ToolTip tooltip = new ToolTip();
+                tooltip.SetToolTip(pbox, "Icon: " + icometa.ID);
+                disposeList.Add(tooltip);
+
                 x += width + coordOffset;
-                if (x > 1600)
+                if (x > this.Width - width)
                 {
                     x = 0;
                     y += height + coordOffset;
                 }
+            }
+        }
+
+        private void tSM_ViewGroup_Click(object sender, EventArgs e)
+        {
+            var data = icons.icons.Where(k => icons.group_icons[current_icon_group].Contains(k.Key)).Select(k => k.Value).OrderBy(k => (k.Width == 0 ? 256 : k.Width)).ToList();
+            FormViewIcon form = new FormViewIcon();
+
+            int x = 20;
+            int y = 20;
+            int max_y = 0;
+
+            foreach (var icometa in data)
+            {
+                Icon icon = icons.api.getIcon(icometa.ID);
+                int size = (icometa.Height == 0) ? 256 : icometa.Height;
+
+                int real_size = size;
+                if (size < 40) real_size = 40;
+
+                Label label = new Label();
+                label.AutoSize = false;
+                label.Location = new Point(x, y);
+                label.Size = new Size(real_size, 20);
+                label.TextAlign = ContentAlignment.TopCenter;
+                label.Text = size + "x" + size;
+
+                Label label2 = new Label();
+                label2.AutoSize = false;
+                label2.Location = new Point(x, y + real_size + 20);
+                label2.Size = new Size(real_size, 20);
+                label2.TextAlign = ContentAlignment.TopCenter;
+                label2.Text = icometa.ID.ToString();
+
+                PictureBox pic = new PictureBox();
+                pic.Location = new Point(x, y + 20);
+                pic.Size = new Size(real_size, real_size);
+                pic.SizeMode = PictureBoxSizeMode.CenterImage;
+                pic.Image = icon.ToBitmap();
+
+                form.Controls.Add(label);
+                form.Controls.Add(label2);
+                form.Controls.Add(pic);
+
+                x += real_size + 20;
+                max_y = size < max_y ? max_y : size;
+            }
+
+            form.Text = "Icon group #" + current_icon_group + " [" + Path.GetFileName(filename) + "]";
+            form.Location = Cursor.Position;
+            form.Size = new Size(x + 40, max_y + 100);
+            form.Show(this);
+        }
+
+        private void FormIcon_ResizeEnd(object sender, EventArgs e)
+        {
+            tabControl1_SelectedIndexChanged(tabControl1, null);
+        }
+
+        private void FormIcon_Resize(object sender, EventArgs e)
+        {
+            if(this.WindowState == FormWindowState.Maximized) {
+                tabControl1_SelectedIndexChanged(tabControl1, null);
             }
         }
     }

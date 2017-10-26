@@ -31,14 +31,15 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageInfo = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
             this.tSM = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tSM_InfoGroup = new System.Windows.Forms.ToolStripMenuItem();
+            this.tSM_InfoID = new System.Windows.Forms.ToolStripMenuItem();
+            this.tSM_ViewGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.tSM_Line1 = new System.Windows.Forms.ToolStripSeparator();
             this.tSM_Line2 = new System.Windows.Forms.ToolStripSeparator();
             this.tSM_SaveAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tSM_SaveOneFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tSM_InfoID = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageInfo.SuspendLayout();
             this.tSM.SuspendLayout();
@@ -66,11 +67,21 @@
             this.tabPageInfo.Text = "INFO";
             this.tabPageInfo.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(19, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(474, 288);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Example\nText";
+            // 
             // tSM
             // 
             this.tSM.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tSM_InfoGroup,
             this.tSM_InfoID,
+            this.tSM_ViewGroup,
             this.tSM_Line1,
             this.tSM_Line2,
             this.tSM_SaveAll,
@@ -83,6 +94,19 @@
             this.tSM_InfoGroup.Enabled = false;
             this.tSM_InfoGroup.Name = "tSM_InfoGroup";
             this.tSM_InfoGroup.Size = new System.Drawing.Size(200, 22);
+            // 
+            // tSM_InfoID
+            // 
+            this.tSM_InfoID.Enabled = false;
+            this.tSM_InfoID.Name = "tSM_InfoID";
+            this.tSM_InfoID.Size = new System.Drawing.Size(200, 22);
+            // 
+            // tSM_ViewGroup
+            // 
+            this.tSM_ViewGroup.Name = "tSM_ViewGroup";
+            this.tSM_ViewGroup.Size = new System.Drawing.Size(200, 22);
+            this.tSM_ViewGroup.Text = "View all icons in group";
+            this.tSM_ViewGroup.Click += new System.EventHandler(this.tSM_ViewGroup_Click);
             // 
             // tSM_Line1
             // 
@@ -108,24 +132,10 @@
             this.tSM_SaveOneFile.Text = "Save all icons to one file";
             this.tSM_SaveOneFile.ToolTipText = "Not implemented yet";
             // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(19, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(474, 288);
-            this.label1.TabIndex = 0;
-            // 
-            // tSM_InfoID
-            // 
-            this.tSM_InfoID.Enabled = false;
-            this.tSM_InfoID.Name = "tSM_InfoID";
-            this.tSM_InfoID.Size = new System.Drawing.Size(200, 22);
-            // 
             // FormIcon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(538, 369);
             this.Controls.Add(this.tabControl1);
             this.Name = "FormIcon";
@@ -134,6 +144,8 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormIcon_FormClosed);
             this.Load += new System.EventHandler(this.FormIcon_Load);
             this.Shown += new System.EventHandler(this.FormIcon_Shown);
+            this.ResizeEnd += new System.EventHandler(this.FormIcon_ResizeEnd);
+            this.Resize += new System.EventHandler(this.FormIcon_Resize);
             this.tabControl1.ResumeLayout(false);
             this.tabPageInfo.ResumeLayout(false);
             this.tSM.ResumeLayout(false);
@@ -153,5 +165,6 @@
         private System.Windows.Forms.ToolStripMenuItem tSM_SaveOneFile;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem tSM_InfoID;
+        private System.Windows.Forms.ToolStripMenuItem tSM_ViewGroup;
     }
 }
