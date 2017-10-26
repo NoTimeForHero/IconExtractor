@@ -118,7 +118,10 @@ namespace IconExtractor
             if (me.Button != MouseButtons.Right) return;
 
             int id = Convert.ToInt32(pbox.Name.Split(new string[] { "Icon_" }, StringSplitOptions.None)[1]);
-            tSM_Info.Text = String.Format("Group {0}      (icon {1})",icons.icon_to_group[id],id);
+            int group = icons.icon_to_group[id];
+
+            tSM_InfoGroup.Text = "Group " + group;
+            tSM_InfoID.Text = "Icon " + id;
 
             // Удаляем элементы из предыдущего меню
             for (int i=tSM.Items.Count-1;i>=0;i--)
@@ -128,14 +131,40 @@ namespace IconExtractor
                 tSM.Items.Remove(item);
             }
 
-            //var all_icons = icon_to_group.Where(x => x.Value == icon_to_group[id]).Select(x => x.Key).ToList();
+            var sizes = icons.icons.Where(k => icons.group_icons[group].Contains(k.Key)).Select(k => (k.Value.Width == 0 ? 256 : k.Value.Height)).Distinct().OrderBy(k => k).ToList();
 
-            ToolStripMenuItem value = new ToolStripMenuItem();
-            value.Name = "Temp";
-            value.Text = "Hello " + id;
-            tSM.Items.Insert(tSM.Items.IndexOf(tSM_Line1) + 1, value);
+            foreach (var size in sizes)
+            {
+                ToolStripMenuItem value = new ToolStripMenuItem();
+                value.Name = "Temp_" + size + "_" + group;
+                value.Text = "Save icon " + size + "x" + size;
+                value.Click += SaveIconSize_Click;
+                tSM.Items.Insert(tSM.Items.IndexOf(tSM_Line2), value);
+            }
 
             tSM.Show(Cursor.Position);
+        }
+
+        private void SaveIconSize_Click(object sender, EventArgs e)
+        {
+            var parts = ((ToolStripMenuItem)sender).Name.Split('_');
+            int size = Convert.ToInt32(parts[1]);
+            if (size == 256) size = 0;
+
+            int group = Convert.ToInt32(parts[2]);
+
+            var list = icons.icons.Where(k => icons.group_icons[group].Contains(k.Key)).Where(k => k.Value.Height == size).Select(k => k.Value).ToList();
+            foreach (var item in list) {
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.Filter = "Icon_[group]_[id]_x[size].ico|*.ico";
+                dialog.FileName = String.Format("Icon_{0}_{1}_x{2}.ico",group,item.ID,(size==0?256:size));
+                var result = dialog.ShowDialog();
+                if (result != DialogResult.OK) continue;
+
+                Icon icon = icons.api.getIcon(item.ID);
+                using (FileStream fs = new FileStream(dialog.FileName, FileMode.Create))
+                    icon.Save(fs);
+            }
         }
 
         private void FormIcon_Load(object sender, EventArgs e)
