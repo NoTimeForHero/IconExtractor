@@ -60,6 +60,7 @@ namespace IconExtractor
         protected IconData icons;
         protected long dllReadTime;
 
+        protected Point current_position;
         protected int current_icon_group;
 
         public FormIcon(FormMain parent, String filename)
@@ -129,6 +130,7 @@ namespace IconExtractor
                 tSM.Items.Insert(tSM.Items.IndexOf(tSM_Line2), value);
             }
 
+            current_position = Cursor.Position;
             current_icon_group = group;
             tSM.Show(Cursor.Position);
         }
@@ -227,8 +229,9 @@ namespace IconExtractor
 
         private void tSM_ViewGroup_Click(object sender, EventArgs e)
         {
-            var data = icons.icons.Where(k => icons.group_icons[current_icon_group].Contains(k.Key)).Select(k => k.Value).OrderBy(k => (k.Width == 0 ? 256 : k.Width)).ToList();
             FormViewIcon form = new FormViewIcon();
+
+            var data = icons.icons.Where(k => icons.group_icons[current_icon_group].Contains(k.Key)).Select(k => k.Value).OrderBy(k => (k.Width == 0 ? 256 : k.Width)).ToList();
 
             int x = 20;
             int y = 20;
@@ -270,9 +273,25 @@ namespace IconExtractor
                 max_y = size < max_y ? max_y : size;
             }
 
+            var position = current_position;
+            var mouse = PointToScreen(current_position);
+            var screen = GetScreen();
+
             form.Text = "Icon group #" + current_icon_group + " [" + Path.GetFileName(filename) + "]";
-            form.Location = Cursor.Position;
-            form.Size = new Size(x + 40, max_y + 100);
+
+            var Size = new Size(x + 40, max_y + 100);
+
+            // If form size larger then screen size
+            if (Size.Width > screen.Width) Size.Width = (int)(screen.Width * 0.8);
+            if (Size.Height > screen.Height) Size.Height = (int)(screen.Height * 0.8);
+
+            // If close button outside the screen
+            if (mouse.X + Size.Width > screen.Width)
+                position.X = screen.Width - Size.Width;
+
+            form.Size = Size;
+            Console.WriteLine(position);
+            form.Location = position;
             form.Show(this);
         }
 
@@ -286,6 +305,11 @@ namespace IconExtractor
             if(this.WindowState == FormWindowState.Maximized) {
                 tabControl1_SelectedIndexChanged(tabControl1, null);
             }
+        }
+
+        protected Rectangle GetScreen()
+        {
+            return Screen.FromControl(this).Bounds;
         }
     }
 }

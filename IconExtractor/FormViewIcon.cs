@@ -16,5 +16,9 @@ namespace IconExtractor
             InitializeComponent();
         }
 
+        private void FormViewIcon_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
