@@ -87,7 +87,7 @@
             this.tSM_SaveAll,
             this.tSM_SaveOneFile});
             this.tSM.Name = "contextMenuStrip1";
-            this.tSM.Size = new System.Drawing.Size(201, 126);
+            this.tSM.Size = new System.Drawing.Size(201, 148);
             // 
             // tSM_InfoGroup
             // 
@@ -123,14 +123,14 @@
             this.tSM_SaveAll.Name = "tSM_SaveAll";
             this.tSM_SaveAll.Size = new System.Drawing.Size(200, 22);
             this.tSM_SaveAll.Text = "Save all size icons";
+            this.tSM_SaveAll.Click += new System.EventHandler(this.tSM_SaveAll_Click);
             // 
             // tSM_SaveOneFile
             // 
-            this.tSM_SaveOneFile.Enabled = false;
             this.tSM_SaveOneFile.Name = "tSM_SaveOneFile";
             this.tSM_SaveOneFile.Size = new System.Drawing.Size(200, 22);
             this.tSM_SaveOneFile.Text = "Save all icons to one file";
-            this.tSM_SaveOneFile.ToolTipText = "Not implemented yet";
+            this.tSM_SaveOneFile.Click += new System.EventHandler(this.tSM_SaveOneFile_Click);
             // 
             // FormIcon
             // 

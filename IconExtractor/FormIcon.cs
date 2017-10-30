@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.IconLib;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -55,6 +56,7 @@ namespace IconExtractor
         public List<IDisposable> disposeList = new List<IDisposable>();
 
         protected FormMain parent;
+        protected SaveFileDialog dialog = new SaveFileDialog();
 
         protected string filename;
         protected IconData icons;
@@ -69,6 +71,8 @@ namespace IconExtractor
             this.icons = new IconData(filename);
             watch.Stop();
             dllReadTime = watch.ElapsedMilliseconds;
+
+            dialog.Filter = "Icon_[group]_[id]_x[size].ico|*.ico";
 
             this.parent = parent;
             this.filename = filename;
@@ -135,6 +139,14 @@ namespace IconExtractor
             tSM.Show(Cursor.Position);
         }
 
+        private void SaveIcon(string path, int id)
+        {
+            IconImage iconImage = icons.api.getIconImage(id);
+            SingleIcon single = new SingleIcon(id.ToString());
+            single.Add(iconImage);
+            single.Save(path);
+        }
+
         private void SaveIconSize_Click(object sender, EventArgs e)
         {
             var parts = ((ToolStripMenuItem)sender).Name.Split('_');
@@ -145,15 +157,10 @@ namespace IconExtractor
 
             var list = icons.icons.Where(k => icons.group_icons[group].Contains(k.Key)).Where(k => k.Value.Height == size).Select(k => k.Value).ToList();
             foreach (var item in list) {
-                SaveFileDialog dialog = new SaveFileDialog();
                 dialog.Filter = "Icon_[group]_[id]_x[size].ico|*.ico";
                 dialog.FileName = String.Format("Icon_{0}_{1}_x{2}.ico",group,item.ID,(size==0?256:size));
-                var result = dialog.ShowDialog();
-                if (result != DialogResult.OK) continue;
-
-                Icon icon = icons.api.getIcon(item.ID);
-                using (FileStream fs = new FileStream(dialog.FileName, FileMode.Create))
-                    icon.Save(fs);
+                if (dialog.ShowDialog() != DialogResult.OK) break;
+                SaveIcon(dialog.FileName, item.ID);
             }
         }
 
@@ -227,9 +234,18 @@ namespace IconExtractor
             }
         }
 
+        public void SaveIconById(FormViewIcon sender, int id)
+        {
+            var icon = icons.icons[id];
+            dialog.Filter = "Icon_[id]_x[size].ico|*.ico";
+            dialog.FileName = String.Format("Icon_{0}_x{1}.ico", icon.ID, (icon.Height == 0 ? 256 : icon.Height));
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+            SaveIcon(dialog.FileName, icon.ID);
+        }
+
         private void tSM_ViewGroup_Click(object sender, EventArgs e)
         {
-            FormViewIcon form = new FormViewIcon();
+            FormViewIcon form = new FormViewIcon(this);
 
             var data = icons.icons.Where(k => icons.group_icons[current_icon_group].Contains(k.Key)).Select(k => k.Value).OrderBy(k => (k.Width == 0 ? 256 : k.Width)).ToList();
 
@@ -264,6 +280,7 @@ namespace IconExtractor
                 pic.Size = new Size(real_size, real_size);
                 pic.SizeMode = PictureBoxSizeMode.CenterImage;
                 pic.Image = icon.ToBitmap();
+                pic.Click += delegate { form.showContextMenu(icometa.ID); };
 
                 form.Controls.Add(label);
                 form.Controls.Add(label2);
@@ -310,6 +327,34 @@ namespace IconExtractor
         protected Rectangle GetScreen()
         {
             return Screen.FromControl(this).Bounds;
+        }
+
+        private void tSM_SaveAll_Click(object sender, EventArgs e)
+        {
+            var list = icons.icons.Where(k => icons.group_icons[current_icon_group].Contains(k.Key)).Select(k => k.Value).OrderBy(k => (k.Width == 0 ? 256 : k.Width)).ToList();
+            foreach (var item in list)
+            {
+                dialog.Filter = "Icon_[group]_[id]_x[size].ico|*.ico";
+                dialog.FileName = String.Format("Icon_{0}_{1}_x{2}.ico", current_icon_group, item.ID, (item.Width == 0 ? 256 : item.Width));
+                if (dialog.ShowDialog() != DialogResult.OK) break;
+                SaveIcon(dialog.FileName, item.ID);
+            }
+        }
+
+        private void tSM_SaveOneFile_Click(object sender, EventArgs e)
+        {
+            var data = icons.icons.Where(k => icons.group_icons[current_icon_group].Contains(k.Key)).Select(k => k.Value).OrderBy(k => (k.Width == 0 ? 256 : k.Width)).ToList();
+
+            SingleIcon single = new SingleIcon("all");
+            foreach (var icon in data)
+            {
+                IconImage iconImage = icons.api.getIconImage(icon.ID);
+                single.Add(iconImage);
+            }
+            dialog.Filter = "Icon_[group].ico|*.ico";
+            dialog.FileName = String.Format("Icon_{0}.ico", current_icon_group);
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+            single.Save(dialog.FileName);
         }
     }
 }
