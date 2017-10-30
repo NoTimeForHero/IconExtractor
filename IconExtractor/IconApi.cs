@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Drawing.IconLib;
+using System.IO;
 
 namespace IconExtractor
 {
@@ -109,6 +111,28 @@ namespace IconExtractor
         {
             Console.WriteLine("Очистка библиотеки");
             FreeLibrary(hMod);
+        }
+        
+        public IconImage getIconImage(int id)
+        {
+            string lpName = "#" + id; // To use integer resource ID instead of string, and avoid using MAKEINTRESOURCE, prepend the integer with '#'. For example, to use resource ID 32512, enter "#32512" for lpszName.
+
+            IntPtr hRsrc = FindResource(hMod, lpName, (IntPtr)RT_ICON);
+            if (hRsrc == IntPtr.Zero) throw new Win32Exception();
+
+            IntPtr hGlobal = LoadResource(hMod, hRsrc);
+            if (hGlobal == IntPtr.Zero) throw new Win32Exception();
+
+            IntPtr hRes = LockResource(hGlobal);
+            if (hRes == IntPtr.Zero) throw new Win32Exception();
+
+            uint size = SizeofResource(hMod, hRsrc);
+            if (size == 0) throw new Win32Exception();
+
+            byte[] data = new byte[size];
+            Marshal.Copy(hRes, data, 0, (int)size);
+            MemoryStream ms = new MemoryStream(data);
+            return new IconImage(ms, (int)size);
         }
 
         public Icon getIcon(int id)
