@@ -53,6 +53,10 @@ namespace IconExtractor
             }
         }
 
+        protected static readonly int coordOffset = 10;
+        protected static readonly double widthMultiplier = 1.5;
+
+        public List<Tuple<IconApi.GRPICONDIRENTRY,PictureBox>> pictures = new List<Tuple<IconApi.GRPICONDIRENTRY,PictureBox>>();
         public List<IDisposable> disposeList = new List<IDisposable>();
 
         protected FormMain parent;
@@ -78,6 +82,7 @@ namespace IconExtractor
             this.filename = filename;
 
             InitializeComponent();
+            setDefaultCaption();
         }
 
         public bool updateColors(Color color)
@@ -182,16 +187,26 @@ namespace IconExtractor
             setIconSizes();
         }
 
+        private void setDefaultCaption()
+        {
+            this.Text = String.Format("{0} ({1} icons total)", Path.GetFileName(this.filename), icons.icons.Count);
+        }
+
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var tabcontrol = (sender as TabControl);
             TabPage tab = tabcontrol.TabPages[tabcontrol.SelectedIndex];
 
             bool contains = icons.icon_sizes.ContainsValue(tab.Text);
-            if (!contains) return;
+            if (!contains)
+            {
+                setDefaultCaption();
+                return;
+            }
 
             // Удаляем предыдущие иконки
             foreach (var obj in disposeList) obj.Dispose();
+            pictures.Clear();
             disposeList.Clear();
 
             int size = icons.icon_sizes.First(obj => obj.Value == tab.Text).Key;
@@ -199,11 +214,9 @@ namespace IconExtractor
             int x = 0;
             int y = 0;
 
-            int coordOffset = 10;
-
             foreach (var id in icons.size_icons[size])
             {
-                var icometa = icons.icons[id];
+                IconApi.GRPICONDIRENTRY icometa = icons.icons[id];
                 Icon icon = icons.api.getIcon(icometa.ID);
 
                 int width = icometa.Width;
@@ -220,18 +233,21 @@ namespace IconExtractor
                 pbox.Click += Pbox_Click;
                 tab.Controls.Add(pbox);
                 disposeList.Add(pbox);
+                pictures.Add(Tuple.Create(icometa,pbox));
 
                 ToolTip tooltip = new ToolTip();
                 tooltip.SetToolTip(pbox, "Icon: " + icometa.ID);
                 disposeList.Add(tooltip);
 
                 x += width + coordOffset;
-                if (x > this.Width - width)
+                if (x > this.Width - width * widthMultiplier)
                 {
                     x = 0;
                     y += height + coordOffset;
                 }
             }
+
+            this.Text = String.Format("{0} [{1} icons {2}]", Path.GetFileName(this.filename), icons.size_icons[size].Count, size + "x" + size);
         }
 
         public void SaveIconById(FormViewIcon sender, int id)
@@ -314,13 +330,35 @@ namespace IconExtractor
 
         private void FormIcon_ResizeEnd(object sender, EventArgs e)
         {
-            tabControl1_SelectedIndexChanged(tabControl1, null);
+            int y = 0;
+            int x = 0;
+            int id = 0;
+            foreach (var tuple in pictures)
+            {
+                var icon = tuple.Item1;
+                var picture = tuple.Item2;
+                var size = (icon.Width == 0) ? 256 : icon.Width;
+
+                picture.Location = new Point(x, y);
+
+                x += size + coordOffset;
+                if (x > this.Width - size)
+                {
+                    x = 0;
+                    y += size + coordOffset;
+                    Console.WriteLine("NEW LINE!!!!");
+                }
+                Console.WriteLine(String.Format("New coords (id {0}): x={1},y={2}", id, x, y));
+                id++;
+            }
+            Console.WriteLine("===== Resize End ========");
+            //this.Invalidate();
         }
 
         private void FormIcon_Resize(object sender, EventArgs e)
         {
             if(this.WindowState == FormWindowState.Maximized) {
-                tabControl1_SelectedIndexChanged(tabControl1, null);
+                FormIcon_ResizeEnd(sender, e);
             }
         }
 
