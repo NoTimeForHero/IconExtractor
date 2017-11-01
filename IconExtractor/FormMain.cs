@@ -180,5 +180,11 @@ namespace IconExtractor
                 form.Close();
             }
         }
+
+        private void ToolStrip_About_Click(object sender, EventArgs e)
+        {
+            FormAbout about = new FormAbout();
+            about.Show(this);
+        }
     }
 }
