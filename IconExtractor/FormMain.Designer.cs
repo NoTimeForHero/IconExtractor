@@ -125,6 +125,7 @@
             this.ToolStrip_MenuSize.Size = new System.Drawing.Size(112, 44);
             this.ToolStrip_MenuSize.Text = "Close all";
             this.ToolStrip_MenuSize.ToolTipText = "Change Icon Size";
+            this.ToolStrip_MenuSize.Click += new System.EventHandler(this.ToolStrip_MenuSize_Click);
             // 
             // FormMain
             // 

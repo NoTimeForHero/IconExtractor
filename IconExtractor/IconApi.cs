@@ -109,7 +109,6 @@ namespace IconExtractor
 
         public void Dispose()
         {
-            Console.WriteLine("Очистка библиотеки");
             FreeLibrary(hMod);
         }
         
