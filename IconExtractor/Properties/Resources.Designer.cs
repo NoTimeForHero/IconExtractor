@@ -89,5 +89,15 @@ namespace IconExtractor.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon main {
+            get {
+                object obj = ResourceManager.GetObject("main", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
