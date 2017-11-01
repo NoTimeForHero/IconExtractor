@@ -39,6 +39,7 @@
             this.toolStripItem_System = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripItem_Palette = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStrip_MenuSize = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStrip_About = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,10 +51,11 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStrip_MenuSelect,
             this.ToolStrip_MenuColor,
-            this.ToolStrip_MenuSize});
+            this.ToolStrip_MenuSize,
+            this.ToolStrip_About});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(721, 48);
+            this.menuStrip1.Size = new System.Drawing.Size(786, 48);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -127,18 +129,26 @@
             this.ToolStrip_MenuSize.ToolTipText = "Change Icon Size";
             this.ToolStrip_MenuSize.Click += new System.EventHandler(this.ToolStrip_MenuSize_Click);
             // 
+            // ToolStrip_About
+            // 
+            this.ToolStrip_About.Image = global::IconExtractor.Properties.Resources.main;
+            this.ToolStrip_About.Name = "ToolStrip_About";
+            this.ToolStrip_About.Size = new System.Drawing.Size(96, 44);
+            this.ToolStrip_About.Text = "About";
+            this.ToolStrip_About.Click += new System.EventHandler(this.ToolStrip_About_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(721, 455);
+            this.ClientSize = new System.Drawing.Size(786, 504);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "SharpViewIcon - Tool to view embedded icons";
+            this.Text = "IconExtractor - Tool to view and extract embedded icons";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -159,6 +169,7 @@
         private System.Windows.Forms.ToolStripSeparator tsMS_Line1;
         private System.Windows.Forms.ToolStripMenuItem tsMS_OpenFile;
         private System.Windows.Forms.ToolStripMenuItem tsMS_System;
+        private System.Windows.Forms.ToolStripMenuItem ToolStrip_About;
     }
 }
 
