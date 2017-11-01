@@ -19,10 +19,15 @@ namespace IconExtractor
 
         protected static FormMain self;
         protected List<FormIcon> childs = new List<FormIcon>();
-        protected Color child_color = SystemColors.Control;
+        public Color child_color
+        {
+            get { return _child_color; }
+        }
+
+        protected Color _child_color = SystemColors.Control;
         protected string[] system_dlls =
         {
-            "lol_test_okay.dll", "shell32.dll", "compstui.dll", "ieframe.dll", "mmcndmgr.dll", "moricons.dll", "netshell.dll", "pifmgr.dll", "setupapi.dll", "wmploc.dll", "wpdshext.dll",
+            "shell32.dll", "compstui.dll", "ieframe.dll", "mmcndmgr.dll", "moricons.dll", "netshell.dll", "pifmgr.dll", "setupapi.dll", "wmploc.dll", "wpdshext.dll",
             "imageres.dll", "ddores.dll", "AccessibilityCpl.dll", "gameux.dll", "mmRes.dll", "NetCenter.dll", "networkexplorer.dll", "pnidui.dll", "SensorsCpl.dll",
         };
 
@@ -87,7 +92,7 @@ namespace IconExtractor
 
         protected void updateChildColor(Color color)
         {
-            child_color = color;
+            _child_color = color;
             foreach (FormIcon form in childs)
             {
                 form.updateColors(color);
@@ -131,8 +136,6 @@ namespace IconExtractor
 
         private void ToolStrip_MenuSelect_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Wat: " + Properties.Settings.Default.LatestFiles);
-            Console.WriteLine("null? " + (Properties.Settings.Default.LatestFiles == null ? "yes" : "no"));
             if (Properties.Settings.Default.LatestFiles == null) return;
 
             var items = ToolStrip_MenuSelect.DropDownItems;
@@ -167,6 +170,15 @@ namespace IconExtractor
             Properties.Settings.Default.Heigth = Height;
             Properties.Settings.Default.Width = Width;
             Properties.Settings.Default.Save();
+        }
+
+        private void ToolStrip_MenuSize_Click(object sender, EventArgs e)
+        {
+            for (int i=childs.Count-1;i>=0;i--)
+            {
+                FormIcon form = childs[i];
+                form.Close();
+            }
         }
     }
 }

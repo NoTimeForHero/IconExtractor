@@ -87,7 +87,7 @@
             this.tSM_SaveAll,
             this.tSM_SaveOneFile});
             this.tSM.Name = "contextMenuStrip1";
-            this.tSM.Size = new System.Drawing.Size(201, 148);
+            this.tSM.Size = new System.Drawing.Size(201, 126);
             // 
             // tSM_InfoGroup
             // 
@@ -138,6 +138,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(538, 369);
             this.Controls.Add(this.tabControl1);
+            this.DoubleBuffered = true;
             this.Name = "FormIcon";
             this.ShowIcon = false;
             this.Text = "FormIcon";

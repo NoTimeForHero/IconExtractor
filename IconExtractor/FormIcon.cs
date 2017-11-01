@@ -104,7 +104,8 @@ namespace IconExtractor
                 tab.AutoScroll = true;
                 tab.Text = obj.Value;
                 tabControl1.TabPages.Add(tab);
-            }            
+            }
+            this.updateColors(parent.child_color);
             this.Invalidate();
         }
 
@@ -172,8 +173,11 @@ namespace IconExtractor
         private void FormIcon_Load(object sender, EventArgs e)
         {
             label1.Text = String.Format("Resources loaded in {0} seconds ({1}ms)", dllReadTime, dllReadTime);
-            var data = "\n\nExecutable name: {0}\n" + "Groups: {1}\n" + "Icons: {2}\n";
-            label1.Text += String.Format(data, Path.GetFileName(filename), icons.group_icons.Count, icons.icons.Count);
+            var data = "\n\nExecutable name: {0}\n" + "Groups: {1}\n" + "Icons: {2}\n\n";
+            data = String.Format(data, Path.GetFileName(filename), icons.group_icons.Count, icons.icons.Count);
+            foreach (var item in icons.size_icons)
+                data += String.Format("{0} icons {1}x{1}\n", item.Value.Count, item.Key);
+            label1.Text = data;
         }
 
         private void FormIcon_FormClosed(object sender, FormClosedEventArgs e)
