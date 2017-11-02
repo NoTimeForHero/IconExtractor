@@ -20,7 +20,7 @@
     <Setting Name="Y" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="maximized" Type="System.Boolean" Scope="User">
+    <Setting Name="filter_colors" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

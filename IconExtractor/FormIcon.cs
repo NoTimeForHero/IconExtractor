@@ -109,6 +109,18 @@ namespace IconExtractor
             this.Invalidate();
         }
 
+        private void Pbox_DoubleClick(object sender, EventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            PictureBox pbox = (PictureBox)sender;
+
+            int id = Convert.ToInt32(pbox.Name.Split(new string[] { "Icon_" }, StringSplitOptions.None)[1]);
+            current_position = Cursor.Position;
+            current_icon_group = icons.icon_to_group[id];
+
+            tSM_ViewGroup_Click(null, null);
+        }
+
         private void Pbox_Click(object sender, EventArgs e)
         {
             MouseEventArgs me = (MouseEventArgs)e;
@@ -151,6 +163,11 @@ namespace IconExtractor
             SingleIcon single = new SingleIcon(id.ToString());
             single.Add(iconImage);
             single.Save(path);
+        }
+
+        public void RedrawIcons()
+        {
+            tabControl1_SelectedIndexChanged(tabControl1, null);
         }
 
         private void SaveIconSize_Click(object sender, EventArgs e)
@@ -217,10 +234,25 @@ namespace IconExtractor
 
             int x = 0;
             int y = 0;
+            int showed = 0;
+
+            bool filter_colors = parent.filter_colors;
 
             foreach (var id in icons.size_icons[size])
             {
                 IconApi.GRPICONDIRENTRY icometa = icons.icons[id];
+                var group = icons.icon_to_group[icometa.ID];
+
+                if (filter_colors)
+                {
+                    var count = icons.icons.Select(k => k.Value)
+                        .Where(k => icons.icon_to_group[k.ID] == group) // принадлежит к той же группе
+                        .Where(k => k.Width == icometa.Width) // одинакового размера
+                        .Where(k => k.BitCount > icometa.BitCount) // лучше цветом
+                        .Count();
+                    if (count > 0) continue;
+                }
+
                 Icon icon = icons.api.getIcon(icometa.ID);
 
                 int width = icometa.Width;
@@ -235,12 +267,13 @@ namespace IconExtractor
                 pbox.Location = new Point(x, y);
                 pbox.Size = new Size(width, height);
                 pbox.Click += Pbox_Click;
+                pbox.DoubleClick += Pbox_DoubleClick;
                 tab.Controls.Add(pbox);
                 disposeList.Add(pbox);
-                pictures.Add(Tuple.Create(icometa,pbox));
+                pictures.Add(Tuple.Create(icometa,pbox));                
 
                 ToolTip tooltip = new ToolTip();
-                tooltip.SetToolTip(pbox, "Icon: " + icometa.ID);
+                tooltip.SetToolTip(pbox, String.Format("Icon: {0} (group {1})",icometa.ID,group));
                 disposeList.Add(tooltip);
 
                 x += width + coordOffset;
@@ -249,9 +282,11 @@ namespace IconExtractor
                     x = 0;
                     y += height + coordOffset;
                 }
+                showed++;
             }
 
-            this.Text = String.Format("{0} [{1} icons {2}]", Path.GetFileName(this.filename), icons.size_icons[size].Count, size + "x" + size);
+            var filtered = parent.filter_colors ? ", showed " + showed : "";
+            this.Text = String.Format("{0} [{1} icons {2}{3}]", Path.GetFileName(this.filename), icons.size_icons[size].Count, size + "x" + size, filtered);
         }
 
         public void SaveIconById(FormViewIcon sender, int id)

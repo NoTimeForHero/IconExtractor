@@ -97,12 +97,12 @@ namespace IconExtractor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool maximized {
+        public bool filter_colors {
             get {
-                return ((bool)(this["maximized"]));
+                return ((bool)(this["filter_colors"]));
             }
             set {
-                this["maximized"] = value;
+                this["filter_colors"] = value;
             }
         }
     }
