@@ -17,11 +17,17 @@ namespace IconExtractor
     {
         public static readonly int MAX_LATEST_FILES = 10;
 
+        protected CheckBox check_filter;
         protected static FormMain self;
         protected List<FormIcon> childs = new List<FormIcon>();
         public Color child_color
         {
             get { return _child_color; }
+        }
+        public bool filter_colors
+        {
+            get { return check_filter.Checked;  }
+            set { check_filter.Checked = value; redrawChildIcons(); }
         }
 
         protected Color _child_color = SystemColors.Control;
@@ -35,6 +41,12 @@ namespace IconExtractor
         {
             self = this;
             InitializeComponent();
+            check_filter = new CheckBox();
+            check_filter.Text = "Show best color icons in group";
+            check_filter.Checked = Properties.Settings.Default.filter_colors;
+            check_filter.CheckedChanged += (o, e) => filter_colors = ((CheckBox)o).Checked;
+            ToolStripControlHost host = new ToolStripControlHost(check_filter);
+            statusStrip1.Items.Insert(1, host);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -88,6 +100,14 @@ namespace IconExtractor
             ColorDialog dialog = new ColorDialog();
             if (dialog.ShowDialog() != DialogResult.OK) return;
             updateChildColor(dialog.Color);
+        }
+
+        protected void redrawChildIcons()
+        {
+            foreach (FormIcon form in childs)
+            {
+                form.RedrawIcons();
+            }
         }
 
         protected void updateChildColor(Color color)
@@ -165,6 +185,7 @@ namespace IconExtractor
                 WindowState = FormWindowState.Normal;
             }
 
+            Properties.Settings.Default.filter_colors = check_filter.Checked;
             Properties.Settings.Default.X = Location.X;
             Properties.Settings.Default.Y = Location.Y;           
             Properties.Settings.Default.Heigth = Height;
