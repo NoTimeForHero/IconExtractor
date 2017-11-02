@@ -25,9 +25,12 @@ namespace IconExtractor
             // Nothing to do here
         }
 
-        public void showContextMenu(int icon_id)
+        public void showContextMenu(IconApi.GRPICONDIRENTRY icometa, int group)
         {
-            this.icon_id = icon_id;
+            this.icon_id = icometa.ID;
+            toolStripMenuItem2.Text = String.Format("Icon {0}  (group {1})", icometa.ID, group);
+            toolStripMenuItem3.Text = String.Format("Height: {0}, width: {1}",icometa.Width == 0 ? 256 : icometa.Width, icometa.Height == 0 ? 256 : icometa.Height);
+            toolStripMenuItem4.Text = icometa.ColorCount == 0 ? "Colors: Unknown" : String.Format("Colors: {0} ({1} bits)", icometa.ColorCount, icometa.BitCount);
             contextMenuStrip1.Show(Cursor.Position);
         }
 

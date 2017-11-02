@@ -321,21 +321,21 @@ namespace IconExtractor
                 label.Location = new Point(x, y);
                 label.Size = new Size(real_size, 20);
                 label.TextAlign = ContentAlignment.TopCenter;
-                label.Text = size + "x" + size;
+                label.Text = icometa.ID.ToString();
 
                 Label label2 = new Label();
                 label2.AutoSize = false;
                 label2.Location = new Point(x, y + real_size + 20);
                 label2.Size = new Size(real_size, 20);
                 label2.TextAlign = ContentAlignment.TopCenter;
-                label2.Text = icometa.ID.ToString();
+                label2.Text = size + "x" + size;
 
                 PictureBox pic = new PictureBox();
                 pic.Location = new Point(x, y + 20);
                 pic.Size = new Size(real_size, real_size);
                 pic.SizeMode = PictureBoxSizeMode.CenterImage;
                 pic.Image = icon.ToBitmap();
-                pic.Click += delegate { form.showContextMenu(icometa.ID); };
+                pic.Click += delegate { form.showContextMenu(icometa, current_icon_group); };
 
                 form.Controls.Add(label);
                 form.Controls.Add(label2);
