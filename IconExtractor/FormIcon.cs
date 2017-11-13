@@ -18,8 +18,8 @@ namespace IconExtractor
         {
             public SortedDictionary<int, IconApi.GRPICONDIRENTRY> icons = new SortedDictionary<int, IconApi.GRPICONDIRENTRY>();
             public SortedDictionary<int, string> icon_sizes = new SortedDictionary<int, string>();
-            public SortedDictionary<int, int> icon_to_group = new SortedDictionary<int, int>();
-            public SortedDictionary<int, List<int>> group_icons = new SortedDictionary<int, List<int>>();
+            public SortedDictionary<int, string> icon_to_group = new SortedDictionary<int, string>();
+            public SortedDictionary<string, List<int>> group_icons = new SortedDictionary<string, List<int>>();
             public SortedDictionary<int, List<int>> size_icons = new SortedDictionary<int, List<int>>();
 
             public IconApi api;
@@ -67,7 +67,7 @@ namespace IconExtractor
         protected long dllReadTime;
 
         protected Point current_position;
-        protected int current_icon_group;
+        protected string current_icon_group;
 
         public FormIcon(FormMain parent, String filename)
         {
@@ -128,7 +128,7 @@ namespace IconExtractor
             if (me.Button != MouseButtons.Right) return;
 
             int id = Convert.ToInt32(pbox.Name.Split(new string[] { "Icon_" }, StringSplitOptions.None)[1]);
-            int group = icons.icon_to_group[id];
+            string group = icons.icon_to_group[id];
 
             tSM_InfoGroup.Text = "Group " + group;
             tSM_InfoID.Text = "Icon " + id;
@@ -176,7 +176,7 @@ namespace IconExtractor
             int size = Convert.ToInt32(parts[1]);
             if (size == 256) size = 0;
 
-            int group = Convert.ToInt32(parts[2]);
+            string group = parts[2];
 
             var list = icons.icons.Where(k => icons.group_icons[group].Contains(k.Key)).Where(k => k.Value.Height == size).Select(k => k.Value).ToList();
             foreach (var item in list) {
@@ -232,8 +232,8 @@ namespace IconExtractor
 
             int size = icons.icon_sizes.First(obj => obj.Value == tab.Text).Key;
 
-            int x = 0;
-            int y = 0;
+            int x = coordOffset;
+            int y = coordOffset;
             int showed = 0;
 
             bool filter_colors = parent.filter_colors;
@@ -279,7 +279,7 @@ namespace IconExtractor
                 x += width + coordOffset;
                 if (x > this.Width - width * widthMultiplier)
                 {
-                    x = 0;
+                    x = coordOffset;
                     y += height + coordOffset;
                 }
                 showed++;
@@ -369,8 +369,11 @@ namespace IconExtractor
 
         private void FormIcon_ResizeEnd(object sender, EventArgs e)
         {
-            int y = 0;
-            int x = 0;
+            TabPage tab = tabControl1.TabPages[tabControl1.SelectedIndex];
+            tab.VerticalScroll.Value = 0;
+
+            int y = coordOffset;
+            int x = coordOffset;
             int id = 0;
             foreach (var tuple in pictures)
             {
@@ -391,7 +394,6 @@ namespace IconExtractor
                 id++;
             }
             Console.WriteLine("===== Resize End ========");
-            //this.Invalidate();
         }
 
         private void FormIcon_Resize(object sender, EventArgs e)

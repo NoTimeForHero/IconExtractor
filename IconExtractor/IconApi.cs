@@ -53,7 +53,7 @@ namespace IconExtractor
 
         public struct ICON_GROUP
         {
-            public int ID;
+            public string ID;
             public List<GRPICONDIRENTRY> icon_groups;
         }
 
@@ -171,6 +171,20 @@ namespace IconExtractor
             return icons;
         }
 
+        private static bool IS_INTRESOURCE(IntPtr value)
+        {
+            if (((uint)value) > ushort.MaxValue)
+                return false;
+            return true;
+        }
+
+        private static string GET_RESOURCE_NAME(IntPtr value)
+        {
+            if (IS_INTRESOURCE(value) == true)
+                return value.ToString();
+            return Marshal.PtrToStringUni((IntPtr)value);
+        }
+
         private bool EnumRes(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, IntPtr lParam) {
             IntPtr hRsrc = FindResourceW(hModule, lpszName, (IntPtr)RT_ICON_GROUP);
             IntPtr hGlobal = LoadResource(hModule, hRsrc);
@@ -197,7 +211,7 @@ namespace IconExtractor
 
             ICON_GROUP result = new ICON_GROUP
             {
-                ID = (int)lpszName,
+                ID = GET_RESOURCE_NAME(lpszName),
                 icon_groups = new List<GRPICONDIRENTRY>()
             };
 

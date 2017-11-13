@@ -25,7 +25,7 @@ namespace IconExtractor
             // Nothing to do here
         }
 
-        public void showContextMenu(IconApi.GRPICONDIRENTRY icometa, int group)
+        public void showContextMenu(IconApi.GRPICONDIRENTRY icometa, string group)
         {
             this.icon_id = icometa.ID;
             toolStripMenuItem2.Text = String.Format("Icon {0}  (group {1})", icometa.ID, group);
